@@ -1,0 +1,138 @@
+#include <iostream>
+#include <string.h>
+
+#include "Stack.h"
+
+Stack::Stack()
+{
+    top = NULL;
+}
+
+Stack::~Stack()
+{
+    StackFramePtr discard = top; // sets pointer to the top node
+    StackFramePtr temp; // temporary pointer to hold address of node right after one being deleted
+    while(discard != NULL)
+   {
+        temp = discard -> next; // points to the second thing in list
+        delete discard; // deletes the front
+        discard = temp; // discard now equal to second thing in list.
+    }
+
+}
+
+bool Stack:: empty()
+{
+    return(top == NULL); //if there is no top then there is no list below it and it will return 0 or NULL
+}
+void Stack::push(string& str)
+{
+    if(empty())
+    {
+        StackFramePtr first; // creates a pointer for the first node in the list
+        first = new StackFrame; // creates the memory area for the new node and points StackFramePtr at it
+        first -> str = new string(str); // assigns a new string to the string value stored in this node
+        first -> num_char = str.size(); // stores the length of this new string value
+        first -> next = NULL; // points to the next node in the list which is null at this point as it is the first node
+        top = first; // sets the pointer top to the same address of the pointer first so when referencing the top of the list it is actually the correct node
+
+    }
+    else
+    {
+        StackFramePtr NewTop; // Creates a new pointer to point at a node that is not the first one in the list
+        NewTop = new StackFrame; // creates the memory space for this new node and points the pointer NewTop at it
+        NewTop -> str = new string(str); // assigns a new string to the string value stored in this node
+        NewTop -> num_char = str.size();// stores the length of this new string value
+        NewTop -> next = top; // This links NewTop to the node below it which is top at this moment
+        top = NewTop; // now this new node put in become the top because last in first out
+
+    }
+    }
+
+string Stack:: pop()
+{
+    if(empty())
+    {
+        return "error the Stack is empty"; // corner case for if Stack has no node in it
+    }
+    else
+    {
+        string DelString; // will hold the str of the top node that will be deleted so
+        StackFramePtr RemoveTop; // this will point to the same address of top so that it can be removed
+        RemoveTop = top; // sets it to the top node
+        top = top -> next; // this says top is now equal to the second node
+        DelString = *(RemoveTop -> str); // holds value of the str string in the orignal top before the pointer pointed ton the second node
+        delete RemoveTop; // deletes that original top node
+
+        return DelString; // returns the string variable fromn the original top that is now deleted
+    }
+}
+
+StackFramePtr Stack::getTop()
+{
+    return top; // returns top from private of class
+}
+
+StackFramePtr Stack::remove_strings_length(int length)
+{
+    Stack LenVal;
+    string RemVal;
+    StackFramePtr strbye;
+    StackFramePtr previous;
+    previous = top;
+      if (top = NULL)
+    {
+        return NULL;
+    }
+ //for(previous = top; previous != NULL; previous -> num_char
+   // {
+
+     //   return NULL;
+   // }
+   for(previous = top; previous != NULL; previous -> num_char == length)
+    {
+
+        RemVal = *previous -> str;
+        LenVal.push(RemVal);
+        top = top -> next;
+    }
+    strbye = top;
+    previous = strbye -> next;
+
+    while(previous != NULL)
+    {
+          if(previous -> num_char == length)
+    {
+        strbye -> next = previous -> next;
+        LenVal.push(RemVal);
+
+    }
+        else
+        {
+            strbye = strbye -> next;
+        }
+        previous = strbye        -> next;
+    }
+
+     cout << LenVal;
+    return LenVal.getTop();
+
+
+
+}
+ ostream &operator<<(ostream &output, Stack &List)
+{
+       StackFramePtr element;
+
+      for(element = List.top; element != NULL; element = element -> next)
+       {
+            output << *element-> str << " " << element -> num_char << endl;
+       }
+}
+istream &operator>>(istream &input, Stack &List)
+{
+    string valueRead;
+    input >> valueRead;
+    List.push(valueRead);
+}
+
